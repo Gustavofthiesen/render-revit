@@ -31,7 +31,11 @@ DEFAULTS = {
     "prefixo": "RENDER_",
     "largura_px": 1920,
     "exportar_ao_salvar": False,
+    "python": "python",
 }
+
+# lib/ -> RenderIA.extension/ -> pyrevit/ -> raiz do repositorio
+RAIZ_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 
 def carregar_config():
@@ -81,3 +85,17 @@ def exportar_vistas(doc, config=None):
 
     doc.ExportImage(opcoes)
     return [v.Name for v in vistas]
+
+
+def iniciar_render():
+    """Abre uma janela do terminal que renderiza as imagens exportadas e abre os resultados."""
+    from System.Diagnostics import Process, ProcessStartInfo
+
+    config = carregar_config()
+    script = os.path.join(RAIZ_REPO, "render_watcher.py")
+    argumentos = '/k ""{}" "{}" --config "{}" --once --abrir"'.format(
+        config["python"], script, CONFIG_PATH
+    )
+    info = ProcessStartInfo("cmd.exe", argumentos)
+    info.UseShellExecute = True
+    Process.Start(info)
