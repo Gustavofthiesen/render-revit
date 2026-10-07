@@ -47,6 +47,13 @@ Revit (vistas RENDER_*)  ──pyRevit──▶  C:\RenderIA\entrada\*.png
    Deixe essa janela aberta: toda imagem nova em `entrada` vira render em `saida`.
    Use `--once` para processar uma vez e sair.
 
+## Um clique só: Exportar e Renderizar
+
+O botão **RenderIA ▸ Exportar e Renderizar** exporta as vistas `RENDER_*`, abre
+uma janela que gera os renders e abre cada imagem pronta — não precisa deixar o
+`render_watcher.py` rodando. Requer a variável `STABILITY_API_KEY` salva com
+`setx` (reinicie o Revit depois) e o repositório em `C:\render-revit`.
+
 ## Configuração (`config.json`)
 
 | Campo | O que faz |
@@ -54,6 +61,7 @@ Revit (vistas RENDER_*)  ──pyRevit──▶  C:\RenderIA\entrada\*.png
 | `prefixo` | Nome que marca as vistas a renderizar (padrão `RENDER_`). |
 | `pasta_entrada` / `pasta_saida` | Onde o Revit exporta e onde os renders são salvos. |
 | `largura_px` | Largura do PNG exportado pelo Revit. |
+| `python` | Comando do Python usado pelo botão *Exportar e Renderizar* (padrão `python`). |
 | `exportar_ao_salvar` | `true` exporta as vistas automaticamente a cada *Salvar*. |
 | `control_strength` | 0–1. Quanto o render respeita a geometria da vista (mais alto = mais fiel). |
 | `prompt_padrao` | Descrição do estilo do render usada para todas as vistas. |

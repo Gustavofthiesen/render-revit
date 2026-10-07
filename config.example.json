@@ -4,6 +4,7 @@
   "prefixo": "RENDER_",
   "largura_px": 1920,
   "exportar_ao_salvar": false,
+  "python": "python",
 
   "control_strength": 0.75,
   "intervalo_segundos": 5,

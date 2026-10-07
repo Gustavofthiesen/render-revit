@@ -98,7 +98,7 @@ def renderizar(origem: Path, destino: Path, prompt: str, config: dict, api_key: 
     destino.write_bytes(resposta.content)
 
 
-def processar_pasta(config: dict, api_key: str) -> int:
+def processar_pasta(config: dict, api_key: str, abrir: bool = False) -> int:
     entrada: Path = config["pasta_entrada"]
     saida: Path = config["pasta_saida"]
     entrada.mkdir(parents=True, exist_ok=True)
@@ -117,6 +117,8 @@ def processar_pasta(config: dict, api_key: str) -> int:
         try:
             renderizar(origem, destino, prompt, config, api_key)
             feitos += 1
+            if abrir and hasattr(os, "startfile"):
+                os.startfile(destino)
         except (RuntimeError, requests.RequestException) as erro:
             print(f"[erro] {origem.name}: {erro}")
     return feitos
@@ -126,6 +128,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--config", default="config.json", help="caminho do config.json")
     parser.add_argument("--once", action="store_true", help="processa a pasta uma vez e sai")
+    parser.add_argument("--abrir", action="store_true", help="abre cada render gerado (Windows)")
     args = parser.parse_args()
 
     api_key = os.environ.get("STABILITY_API_KEY")
@@ -137,12 +140,12 @@ def main() -> int:
     print(f"Monitorando {config['pasta_entrada']} (prefixo '{config['prefixo']}')")
 
     if args.once:
-        print(f"{processar_pasta(config, api_key)} imagem(ns) renderizada(s).")
+        print(f"{processar_pasta(config, api_key, args.abrir)} imagem(ns) renderizada(s).")
         return 0
 
     try:
         while True:
-            processar_pasta(config, api_key)
+            processar_pasta(config, api_key, args.abrir)
             time.sleep(config["intervalo_segundos"])
     except KeyboardInterrupt:
         print("Encerrado.")
