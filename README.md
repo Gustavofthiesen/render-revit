@@ -63,11 +63,19 @@ Revit (vistas RENDER_*)  ──pyRevit──▶  C:\RenderIA\entrada\*.png
 Para usar o config em outro local, defina a variável `RENDERIA_CONFIG`
 com o caminho do arquivo (lida pela extensão do Revit).
 
-## Opcional: renderizar pelo GitHub
+## Renderizar pelo GitHub (sem PC ligado)
 
-`github-workflow-exemplo.yml` é um GitHub Actions que renderiza as imagens
-enviadas para `entrada/` no repositório e faz commit dos resultados
-em `saida/`. Instruções no topo do arquivo.
+O workflow `.github/workflows/render.yml` roda sozinho: envie os PNGs
+`RENDER_*` para a pasta `entrada/` e o GitHub gera os renders em `saida/`.
+Antes, cadastre a chave em **Settings ▸ Secrets and variables ▸ Actions ▸
+New repository secret** com o nome `STABILITY_API_KEY`.
+
+## Renderizar numa conversa com o Claude
+
+Abra uma sessão do Claude Code com este repositório e peça "renderiza as
+imagens novas" — o `CLAUDE.md` explica o processo. O ambiente da sessão
+precisa de `api.stability.ai` em *Allowed domains* e da variável
+`STABILITY_API_KEY` (menu do ambiente ▸ Edit).
 
 ## Dicas para bons renders
 

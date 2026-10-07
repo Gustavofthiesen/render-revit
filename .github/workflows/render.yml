@@ -1,8 +1,6 @@
-# Opcional: renderizar pelo GitHub em vez do PC.
-# Copie para .github/workflows/render.yml do repositorio do Revit e crie o
-# secret STABILITY_API_KEY (Settings > Secrets and variables > Actions).
-# Toda vez que um PNG RENDER_* for enviado para entrada/, o
-# GitHub gera os renders e faz commit em saida/.
+# Renderiza pelo GitHub: todo PNG RENDER_* enviado para entrada/ vira
+# render em saida/. Requer o secret STABILITY_API_KEY
+# (Settings > Secrets and variables > Actions).
 name: Render arquitetonico
 
 on:
@@ -27,6 +25,10 @@ jobs:
         env:
           STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
         run: |
+          if [ -z "$STABILITY_API_KEY" ]; then
+            echo "::warning::Cadastre o secret STABILITY_API_KEY para gerar os renders."
+            exit 0
+          fi
           cp config.example.json config.json
           python - <<'PY'
           import json
