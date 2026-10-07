@@ -1,0 +1,45 @@
+# Opcional: renderizar pelo GitHub em vez do PC.
+# Copie para .github/workflows/render.yml do repositorio do Revit e crie o
+# secret STABILITY_API_KEY (Settings > Secrets and variables > Actions).
+# Toda vez que um PNG RENDER_* for enviado para entrada/, o
+# GitHub gera os renders e faz commit em saida/.
+name: Render arquitetonico
+
+on:
+  push:
+    paths:
+      - "entrada/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Gerar renders
+        env:
+          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
+        run: |
+          cp config.example.json config.json
+          python - <<'PY'
+          import json
+          p = "config.json"
+          c = json.load(open(p, encoding="utf-8"))
+          c["pasta_entrada"], c["pasta_saida"] = "entrada", "saida"
+          json.dump(c, open(p, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+          PY
+          python render_watcher.py --config config.json --once
+      - name: Commit dos renders
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add saida
+          git diff --cached --quiet || git commit -m "Renders gerados automaticamente"
+          git push

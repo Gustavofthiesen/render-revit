@@ -1,0 +1,16 @@
+{
+  "pasta_entrada": "C:\\RenderIA\\entrada",
+  "pasta_saida": "C:\\RenderIA\\saida",
+  "prefixo": "RENDER_",
+  "largura_px": 1920,
+  "exportar_ao_salvar": false,
+
+  "control_strength": 0.75,
+  "intervalo_segundos": 5,
+  "prompt_padrao": "photorealistic architectural render, natural daylight, soft shadows, realistic materials, concrete, glass and wood, landscaping, high detail, professional architectural photography, 8k",
+  "negative_prompt": "cartoon, sketch, blurry, distorted geometry, extra floors, text, watermark, people deformed",
+  "prompts_por_nome": {
+    "Fachada": "photorealistic exterior render of a modern brazilian house facade, golden hour, tropical landscaping, warm light",
+    "Sala": "photorealistic interior render of a living room, large windows, natural light, wooden floor, cozy furniture"
+  }
+}
